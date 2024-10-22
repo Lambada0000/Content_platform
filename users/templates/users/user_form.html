@@ -1,0 +1,32 @@
+{% extends 'content/base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="col-md-6">
+        <form method="post" enctype="multipart/form-data">
+            <div class="card border-success mb-3">
+                <div class="card-header bg-success text-white">
+                    {% if user.is_authenticated %}
+                    <h3 class="mb-0">Профиль</h3>
+                    {% else %}
+                    <h3 class="mb-0">Регистрация</h3>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </div>
+                <div class="card-footer">
+                    {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    {% else %}
+                    <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+                    {% endif %}
+                    <a class="btn btn-primary" href="{% url 'content:content_list' %}" role="button">
+                        Назад
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
