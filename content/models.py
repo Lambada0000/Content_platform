@@ -52,6 +52,7 @@ class Content(models.Model):
         verbose_name="Цена подписки",
         help_text="Укажите цену за подписку",
     )
+    is_content_paid = models.BooleanField(default=False)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -61,10 +62,26 @@ class Content(models.Model):
         blank=True,
         related_name="categories",
     )
+    owner = models.ForeignKey(
+        "users.User",
+        verbose_name="Создатель контента",
+        help_text="Укажите создателя контента",
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+    )
 
     class Meta:
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
+
+    def save(self, *args, **kwargs):
+        # Устанавливаем значение is_content_paid на основе subscription_price
+        if self.subscription_price > 0:
+            self.is_content_paid = True
+        else:
+            self.is_content_paid = False
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

@@ -1,0 +1,19 @@
+{% extends 'content/base.html' %}
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="col-md-6">
+        <div class="card border-danger mb-3">
+            <div class="card-header bg-danger text-white">
+                <h3 class="mb-0">Действительно хотите удалить запись {{ content.title }}?</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                    <a class="btn btn-outline-success" href="{% url 'content:content_list' %}" role="button">Отменить</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

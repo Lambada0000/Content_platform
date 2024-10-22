@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -7,6 +8,7 @@ from django.views.generic import (
     DeleteView,
 )
 
+from content.forms import ContentForm
 from content.models import Content
 
 
@@ -18,10 +20,16 @@ class ContentDetailView(DetailView):
     model = Content
 
 
-class ContentCreateView(CreateView):
+class ContentCreateView(CreateView, LoginRequiredMixin):
     model = Content
-    fields = "__all__"
+    form_class = ContentForm
     success_url = reverse_lazy("content:content_list")
+
+    def form_valid(self, form):
+        content = form.save(commit=False)
+        content.owner = self.request.user
+        content.save()
+        return super().form_valid(form)
 
 
 class ContentUpdateView(UpdateView):

@@ -1,0 +1,27 @@
+{% extends 'content/base.html' %}
+{% load my_tags %}
+{% block content %}
+<main class="container">
+    <div class="row mb-2">
+        <div class="col-md-12">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary-emphasis">{{ object.category }}</strong>
+                    <h3 class="mb-0">{{ object.title }}</h3>
+                    <div class="mb-1 text-body-secondary">{{ object.publication_date }}</div>
+                    <p class="card-text mb-auto">{{ object.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a class="btn btn-outline-success" href="{% url 'content:content_list' %}" role="button">Назад</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img src="{{ content.photo | media_filter }}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}

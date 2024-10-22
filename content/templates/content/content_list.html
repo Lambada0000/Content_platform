@@ -1,14 +1,55 @@
 {% extends 'content/base.html' %}
+{% load my_tags %}
 {% block content %}
 <main class="container">
-    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
-        <div class="col-lg-6 px-0">
-            <h1 class="display-4 fst-italic">Получайте доход за Ваш талант</h1>
-            <p class="lead my-3">Платформа для публикации платного контента</p>
-            <p class="lead mb-0"><a href=# class="text-body-emphasis fw-bold">Создать
-                контент</a>
-            </p>
-        </div>
+    <div class="mb-4 text-center">
+        <h1 class="display-4 fst-italic mb-4">Получайте доход за Ваш талант</h1>
+        <p class="lead mb-4">
+            <a href="{% url 'content:content_create' %}" class="btn btn-success">Создать контент</a>
+        </p>
     </div>
+
+
+    <div class="row mb-2">
+        {% for cont in object_list %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary-emphasis">{{ cont.category }}</strong>
+                    <h3 class="mb-0">{{ cont.title }}</h3>
+                    <div class="mb-1 text-body-secondary">{{ cont.publication_date }}</div>
+                    <div class="col-auto d-none d-lg-block">
+                        <img src="{{ cont.photo | media_filter }}">
+                    </div>
+                    <p class="card-text mb-auto">{{ cont.description|truncatechars:99 }}</p>
+                    {% if cont.is_content_paid %}
+                    {% if user != cont.owner and not users.is_subscribed %}
+                    <a class="mb-1 btn btn-info" href="{% url 'users:paymentstripe' cont.id %}" role="button">
+                        Оформите подписку для продолжения
+                    </a>
+                    {% else %}
+                    <div class="btn-group">
+                        <a class="mb-1 btn btn-success" href="{% url 'content:content_detail' cont.pk %}"
+                           role="button">Посмотреть</a>
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="btn-group">
+                        <a class="mb-1 btn btn-success" href="{% url 'content:content_detail' cont.pk %}"
+                           role="button">Посмотреть</a>
+                    </div>
+                    {% endif %}
+                    {% if user == cont.owner %}
+                    <a class="btn btn-outline-success" href="{% url 'content:content_update' cont.pk %}"
+                       role="button">Редактировать</a>
+                    <a class="btn btn-outline-success" href="{% url 'content:content_delete' cont.pk %}"
+                       role="button">Удалить</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
 </main>
 {% endblock %}
