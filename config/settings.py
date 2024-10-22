@@ -1,4 +1,7 @@
 import os
+from datetime import timedelta
+
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -19,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_beat",
 
     "content",
     "users",
@@ -98,4 +102,22 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 MEDIA_URL = "media/"
 
-# AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "users.User"
+
+LOGIN_URL = reverse_lazy("users:login")
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
