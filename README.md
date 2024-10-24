@@ -33,8 +33,7 @@
 - **Frontend**: Bootstrap
 - **Платежная система**: Stripe
 - **База данных**: PostgreSQL
-- **Контейнеризация**: Docker
-- **Оркестрация контейнеров**: Docker-compose
+- **Контейнеризация**: Docker и Docker-compose
 
 ## Задачи проекта
 
