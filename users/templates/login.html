@@ -18,8 +18,13 @@
                     <a class="btn btn-primary" href="{% url 'content:content_list' %}" role="button">
                         Назад
                     </a>
-                    <a href="#">
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-warning" href="{% url 'users:new_password' %}" role="button">
                         Забыли пароль?
+                    </a>
+                    <a class="btn btn-warning" href="{% url 'users:register' %}" role="button">
+                        Создать аккаунт?
                     </a>
                 </div>
             </div>

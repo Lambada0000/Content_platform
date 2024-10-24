@@ -20,10 +20,13 @@ class ContentDetailView(DetailView):
     model = Content
 
 
-class ContentCreateView(CreateView, LoginRequiredMixin):
+class ContentCreateView(LoginRequiredMixin, CreateView):
     model = Content
     form_class = ContentForm
     success_url = reverse_lazy("content:content_list")
+
+    login_url = reverse_lazy("users:login")
+    redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
         content = form.save(commit=False)
