@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -75,13 +76,12 @@ class Content(models.Model):
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
 
-    def save(self, *args, **kwargs):
-        # Устанавливаем значение is_content_paid на основе subscription_price
-        if self.subscription_price > 0:
-            self.is_content_paid = True
-        else:
-            self.is_content_paid = False
-        super().save(*args, **kwargs)
+    def clean(self):
+        if self.is_content_paid and (self.subscription_price is None or self.subscription_price < 50):
+            raise ValidationError("Если контент платный, цена должна быть больше или равна 50.")
+        elif not self.is_content_paid:
+            self.subscription_price = None
 
-    def __str__(self):
-        return self.title
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
