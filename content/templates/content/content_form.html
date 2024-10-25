@@ -5,29 +5,28 @@
         <form method="post" enctype="multipart/form-data">
             <div class="card border-success mb-3">
                 <div class="card-header bg-success text-white">
-                {% if object %}
-                <h3 class="mb-0">Редактирование записи</h3>
-                {% else %}
-                <h3 class="mb-0">Создание записи</h3>
-                {% endif %}
+                    {% if object %}
+                    <h3 class="mb-0">Редактирование записи</h3>
+                    {% else %}
+                    <h3 class="mb-0">Создание записи</h3>
+                    {% endif %}
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-success">
-                            {% if object %}
-                            Сохранить
-                            {% else %}
-                            Создать
-                            {% endif %}
-                        </button>
-                        <a class="btn btn-primary" href="{% url 'content:content_list' %}" role="button">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">
+                        {% if object %}
+                        Сохранить
+                        {% else %}
+                        Создать
+                        {% endif %}
+                    </button>
+                    <a class="btn btn-primary" href="{% url 'content:content_list' %}" role="button">
                         Назад
-                        </a>
+                    </a>
                 </div>
             </div>
-        </div>
     </div>
+</div>
 </div>
 {% endblock %}

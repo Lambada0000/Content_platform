@@ -163,7 +163,7 @@
 
 
 <header>
-{% if request.resolver_match.url_name not in "login,register, content_create, content_delete, profile" %}
+{% if request.resolver_match.url_name not in "login,register, content_create, confirm_free, content_delete, profile" %}
   {% include 'content/includes/inc_menu.html' %}
 {% endif %}
 </header>
@@ -176,7 +176,7 @@
 </main>
 
 <footer class="text-body-secondary py-5">
-  {% if request.resolver_match.url_name not in "login,register,content_create, content_delete, profile" %}
+  {% if request.resolver_match.url_name not in "login,register,content_create, confirm_free, content_delete, profile" %}
     <div class="container">
       <p class="float-end mb-1">
         <a href="#">Вернуться наверх</a>
