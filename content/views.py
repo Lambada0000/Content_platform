@@ -31,21 +31,17 @@ class ContentCreateView(LoginRequiredMixin, CreateView):
         content = form.save(commit=False)
         content.owner = self.request.user
 
-        # Определяем, является ли контент платным
         if content.subscription_price and content.subscription_price >= 50:
             content.is_content_paid = True
         else:
             content.is_content_paid = False
 
-        # Если контент бесплатный, сохраняем данные в session
         if not content.is_content_paid:
             cleaned_data = form.cleaned_data.copy()
-            # Сохраняем ID категории вместо самого объекта
             cleaned_data['category'] = cleaned_data['category'].id if cleaned_data['category'] else None
-            self.request.session['content_data'] = cleaned_data  # Сериализуемые данные
+            self.request.session['content_data'] = cleaned_data
             return redirect('content:confirm_free')
 
-        # Если контент платный, сохраняем и перенаправляем на список
         content.save()
         return super().form_valid(form)
 
@@ -57,7 +53,6 @@ class ConfirmFreeContentView(TemplateView):
         if 'confirm' in request.POST:
             content_data = request.session.get('content_data')
             if content_data:
-                # Восстанавливаем объект категории по ID
                 category_id = content_data.get('category')
                 if category_id:
                     content_data['category'] = Category.objects.get(id=category_id)
@@ -66,7 +61,7 @@ class ConfirmFreeContentView(TemplateView):
                 if form.is_valid():
                     content = form.save(commit=False)
                     content.owner = request.user
-                    content.subscription_price = 0  # Делаем контент бесплатным
+                    content.subscription_price = 0
                     content.save()
                     return redirect('content:content_list')
 
