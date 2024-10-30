@@ -83,5 +83,5 @@ class Content(models.Model):
             self.subscription_price = None
 
     def save(self, *args, **kwargs):
-        self.clean()
+        self.is_content_paid = bool(self.subscription_price and self.subscription_price >= 50)
         super().save(*args, **kwargs)

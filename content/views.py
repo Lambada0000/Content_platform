@@ -1,15 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
     CreateView,
     UpdateView,
-    DeleteView,
+    DeleteView, TemplateView,
 )
 
 from content.forms import ContentForm
-from content.models import Content
+from content.models import Content, Category
 
 
 class ContentListView(ListView):
@@ -24,15 +25,52 @@ class ContentCreateView(LoginRequiredMixin, CreateView):
     model = Content
     form_class = ContentForm
     success_url = reverse_lazy("content:content_list")
-
     login_url = reverse_lazy("users:login")
-    redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
         content = form.save(commit=False)
         content.owner = self.request.user
+
+        # Определяем, является ли контент платным
+        if content.subscription_price and content.subscription_price >= 50:
+            content.is_content_paid = True
+        else:
+            content.is_content_paid = False
+
+        # Если контент бесплатный, сохраняем данные в session
+        if not content.is_content_paid:
+            cleaned_data = form.cleaned_data.copy()
+            # Сохраняем ID категории вместо самого объекта
+            cleaned_data['category'] = cleaned_data['category'].id if cleaned_data['category'] else None
+            self.request.session['content_data'] = cleaned_data  # Сериализуемые данные
+            return redirect('content:confirm_free')
+
+        # Если контент платный, сохраняем и перенаправляем на список
         content.save()
         return super().form_valid(form)
+
+
+class ConfirmFreeContentView(TemplateView):
+    template_name = 'content/confirm_free.html'
+
+    def post(self, request, *args, **kwargs):
+        if 'confirm' in request.POST:
+            content_data = request.session.get('content_data')
+            if content_data:
+                # Восстанавливаем объект категории по ID
+                category_id = content_data.get('category')
+                if category_id:
+                    content_data['category'] = Category.objects.get(id=category_id)
+
+                form = ContentForm(content_data)
+                if form.is_valid():
+                    content = form.save(commit=False)
+                    content.owner = request.user
+                    content.subscription_price = 0  # Делаем контент бесплатным
+                    content.save()
+                    return redirect('content:content_list')
+
+        return redirect('content:content_create')
 
 
 class ContentUpdateView(UpdateView):

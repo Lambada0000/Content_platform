@@ -5,7 +5,7 @@ from content.views import (
     ContentDetailView,
     ContentCreateView,
     ContentUpdateView,
-    ContentDeleteView,
+    ContentDeleteView, ConfirmFreeContentView,
 )
 
 app_name = ContentConfig.name
@@ -14,6 +14,7 @@ urlpatterns = [
     path("", ContentListView.as_view(), name="content_list"),
     path("content/<int:pk>/", ContentDetailView.as_view(), name="content_detail"),
     path("content/create/", ContentCreateView.as_view(), name="content_create"),
+    path('content/create/confirm_free/', ConfirmFreeContentView.as_view(), name='confirm_free'),
     path(
         "content/<int:pk>/update/", ContentUpdateView.as_view(), name="content_update"
     ),
