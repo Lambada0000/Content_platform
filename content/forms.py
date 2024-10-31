@@ -21,5 +21,5 @@ class ContentForm(StyleFormMixin, ModelForm):
     def clean_subscription_price(self):
         subscription_price = self.cleaned_data.get("subscription_price")
         if subscription_price and subscription_price < 50:
-            raise ValidationError("Цена должна быть больше 50")
+            raise ValidationError("Цена подписки должна быть больше 50")
         return subscription_price
