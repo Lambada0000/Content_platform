@@ -76,12 +76,6 @@ class Content(models.Model):
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
 
-    def clean(self):
-        if self.is_content_paid and (self.subscription_price is None or self.subscription_price < 50):
-            raise ValidationError("Если контент платный, цена должна быть больше или равна 50.")
-        elif not self.is_content_paid:
-            self.subscription_price = None
-
     def save(self, *args, **kwargs):
         self.is_content_paid = bool(self.subscription_price and self.subscription_price >= 50)
         super().save(*args, **kwargs)

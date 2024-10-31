@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, BooleanField
 from content.models import Content
 
@@ -16,3 +17,9 @@ class ContentForm(StyleFormMixin, ModelForm):
     class Meta:
         model = Content
         fields = ("photo", "category", "title", "description", "subscription_price")
+
+    def clean_subscription_price(self):
+        subscription_price = self.cleaned_data.get("subscription_price")
+        if subscription_price and subscription_price < 50:
+            raise ValidationError("Цена должна быть больше 50")
+        return subscription_price

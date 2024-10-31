@@ -31,19 +31,15 @@ class ContentCreateView(LoginRequiredMixin, CreateView):
         content = form.save(commit=False)
         content.owner = self.request.user
 
-        if content.subscription_price and content.subscription_price >= 50:
-            content.is_content_paid = True
-        else:
-            content.is_content_paid = False
-
-        if not content.is_content_paid:
-            cleaned_data = form.cleaned_data.copy()
-            cleaned_data['category'] = cleaned_data['category'].id if cleaned_data['category'] else None
-            self.request.session['content_data'] = cleaned_data
+        if not content.subscription_price:
+            self.request.session['content_data'] = self.request.POST
             return redirect('content:confirm_free')
 
         content.save()
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class ConfirmFreeContentView(TemplateView):
@@ -61,7 +57,7 @@ class ConfirmFreeContentView(TemplateView):
                 if form.is_valid():
                     content = form.save(commit=False)
                     content.owner = request.user
-                    content.subscription_price = 0
+                    content.subscription_price = 0  # Устанавливаем цену в 0 для бесплатного контента
                     content.save()
                     return redirect('content:content_list')
 
