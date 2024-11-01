@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -47,12 +46,6 @@ class Content(models.Model):
         verbose_name="Дата публикации",
         help_text="Укажите дату публикации",
     )
-    subscription_price = models.IntegerField(
-        blank=True,
-        null=True,
-        verbose_name="Цена подписки",
-        help_text="Укажите цену за подписку",
-    )
     is_content_paid = models.BooleanField(default=False)
     category = models.ForeignKey(
         Category,
@@ -76,6 +69,6 @@ class Content(models.Model):
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
 
-    def save(self, *args, **kwargs):
-        self.is_content_paid = bool(self.subscription_price and self.subscription_price >= 50)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.is_content_paid = bool(self.subscription_price and self.subscription_price >= 50)
+    #     super().save(*args, **kwargs)

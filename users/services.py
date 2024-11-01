@@ -1,17 +1,15 @@
 import stripe
 
 from config.settings import STRIPE_API_KEY
-from content.models import Content
 
 stripe.api_key = STRIPE_API_KEY
 
 
-def create_stripe_price(content: Content):
-    """Создает цену в Stripe на основе контента"""
-    subscription_price = content.subscription_price
+def create_stripe_price():
+    """Создает цену в Stripe """
     price = stripe.Price.create(
         currency="rub",
-        unit_amount=int(subscription_price * 100),
+        unit_amount=200000,
         product_data={"name": "Подписка"},
     )
     return price

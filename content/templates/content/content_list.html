@@ -24,7 +24,7 @@
                     <p class="card-text mb-auto">{{ cont.description|truncatechars:99 }}</p>
                     {% if cont.is_content_paid %}
                     {% if user != cont.owner and not users.is_subscribed %}
-                    <a class="mb-1 btn btn-info" href="{% url 'users:paymentstripe' cont.id %}" role="button">
+                    <a class="mb-1 btn btn-info" href="{% url 'users:paymentstripe' %}" role="button">
                         Оформите подписку для продолжения
                     </a>
                     {% else %}

@@ -33,6 +33,8 @@ class User(AbstractUser):
         verbose_name="Аватар",
         help_text="Загрузите аватар",
     )
+    subscription = models.OneToOneField('Subscription', null=True, blank=True, on_delete=models.SET_NULL, related_name='user_subscription')
+
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
@@ -45,20 +47,16 @@ class User(AbstractUser):
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.ForeignKey("content.Content", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription_user')
     date_subscribed = models.DateField(auto_now_add=True)
     is_subscribed = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ('user', 'content')
-
-    def create_subscription(user, content):
-        subscription = Subscription.objects.create(user=user, content=content, is_subscribed=True)
-        return subscription
+    subscription_price = models.PositiveIntegerField(
+        default=2000,
+        help_text="Стоимость подписки в рублях"
+    )
 
     def __str__(self):
-        return f"{self.user} подписан на {self.content}"
+        return f"{self.user} подписан."
 
 
 class Payment(models.Model):

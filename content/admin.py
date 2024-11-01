@@ -4,7 +4,7 @@ from content.models import Content, Category
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'description', 'photo', 'publication_date', 'subscription_price', 'category')
+    list_display = ('id', 'title', 'description', 'photo', 'publication_date', 'category', 'is_content_paid')
 
 
 @admin.register(Category)

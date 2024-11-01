@@ -21,6 +21,6 @@ urlpatterns = [
         name="token_refresh",
     ),
     path('new_password/', NewPasswordView.as_view(), name='new_password'),
-    path("paymentstripe/<int:content_id>/", redirect_to_payment, name="paymentstripe"),
+    path("paymentstripe/", redirect_to_payment, name="paymentstripe"),
     path('profile/', ProfileView.as_view(), name='profile'),
 ]
