@@ -34,7 +34,7 @@ def create_stripe_session(price):
 
 def check_payment_status(payment):
     """Проверяет, оплатил ли пользователь подписку"""
-    session_id = payment.payment_id
+    session_id = payment.session_id
     print(session_id)
     if not session_id:
         return False
