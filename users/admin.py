@@ -8,6 +8,4 @@ class UserAdmin(admin.ModelAdmin):
 
     @admin.register(Subscription)
     class SubscriptionAdmin(admin.ModelAdmin):
-        list_display = ('user', 'is_subscribed', 'subscription_price')
-        list_editable = ('subscription_price',)
-        readonly_fields = ('user', 'is_subscribed', 'date_subscribed')
+        list_display = ('user', 'is_subscribed', 'date_subscribed')
