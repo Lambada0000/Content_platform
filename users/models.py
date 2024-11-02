@@ -50,10 +50,6 @@ class Subscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription_user')
     date_subscribed = models.DateField(auto_now_add=True)
     is_subscribed = models.BooleanField(default=False)
-    subscription_price = models.PositiveIntegerField(
-        default=2000,
-        help_text="Стоимость подписки в рублях"
-    )
 
     def __str__(self):
         return f"{self.user} подписан."

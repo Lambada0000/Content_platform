@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from dotenv import load_dotenv
 from pathlib import Path
 
+SUBSCRIPTION_PRICE = 2000
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent

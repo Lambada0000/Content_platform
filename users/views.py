@@ -5,8 +5,9 @@ from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
+from config import settings
 from users.forms import UserRegisterForm, UserProfileForm
-from users.models import User, Subscription
+from users.models import User, Payment
 from users.services import create_stripe_price, create_stripe_session
 
 
@@ -30,11 +31,17 @@ class ProfileView(CreateView):
 
 @login_required
 def redirect_to_payment(request):
-    # subscription = get_object_or_404(Subscription, user=request.user)
-    # subscription_price = subscription.subscription_price
     price = create_stripe_price()
     session_id, payment_link = create_stripe_session(price)
     user = request.user
-    user.payment_id = session_id
-    user.save()
+
+    # Создание записи в модели Payment
+    payment = Payment.objects.create(
+        user=user,
+        amount=settings.SUBSCRIPTION_PRICE,
+        session_id=session_id,
+        payment_link=payment_link,
+    )
+
+    # check_payment_status(payment)
     return redirect(payment_link)
