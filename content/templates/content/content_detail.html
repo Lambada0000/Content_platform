@@ -1,7 +1,7 @@
 {% extends 'content/base.html' %}
 {% load my_tags %}
 {% block content %}
-<main class="container">
+<main class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="row mb-2">
         <div class="col-md-12">
             <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -17,11 +17,25 @@
                     </div>
                 </div>
                 <div class="col-auto d-none d-lg-block">
-                    <img src="{{ content.photo | media_filter }}">
+                    <img style="height: 250px; width: 100%; border-radius: 15px;" src="{{ content.photo | media_filter }}">
                 </div>
             </div>
+            {% if user == object.owner %}
+            <div class="mt-4">
+                <h5>Подписанные пользователи:</h5>
+                <ul class="list-group">
+                    {% for subscription in object.subscriptions.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ subscription.user.username }}
+                        <span class="text-muted">{{ subscription.user.email }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">Подписчиков пока нет.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         </div>
     </div>
-
 </main>
 {% endblock %}
