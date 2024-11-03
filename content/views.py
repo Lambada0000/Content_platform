@@ -56,7 +56,7 @@ class ContentCreateView(LoginRequiredMixin, CreateView):
 
 class ContentUpdateView(UpdateView):
     model = Content
-    fields = ("photo", "category", "title", "description", "is_content_paid")
+    form_class = ContentForm
     success_url = reverse_lazy("content:content_list")
 
 
