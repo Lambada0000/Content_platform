@@ -24,5 +24,8 @@ class PaymentTestCase(TestCase):
         self.assertTrue(is_paid)
 
         # Проверяем, что подписка обновлена
-        subscription = Subscription.objects.get(user=self.user)
+        subscription, created = Subscription.objects.get_or_create(user=self.user)
         self.assertTrue(subscription.is_subscribed)
+
+        # Проверяем, что подписка уже существует
+        self.assertFalse(created)

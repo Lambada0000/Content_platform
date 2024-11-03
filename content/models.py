@@ -69,6 +69,5 @@ class Content(models.Model):
         verbose_name = "Запись"
         verbose_name_plural = "Записи"
 
-    # def save(self, *args, **kwargs):
-    #     self.is_content_paid = bool(self.subscription_price and self.subscription_price >= 50)
-    #     super().save(*args, **kwargs)
+    def __str__(self):
+        return self.title
