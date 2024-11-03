@@ -46,7 +46,9 @@ class Content(models.Model):
         verbose_name="Дата публикации",
         help_text="Укажите дату публикации",
     )
-    is_content_paid = models.BooleanField(default=False)
+    is_content_paid = models.BooleanField(
+        verbose_name="Сделать контент платным",
+        default=False)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
