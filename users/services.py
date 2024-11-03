@@ -36,19 +36,29 @@ def check_payment_status(payment):
     """Проверяет, оплатил ли пользователь подписку"""
     if payment is None:
         return None
+
     session_id = payment.session_id
-    print(session_id)
+    print("Session ID:", session_id)  # Проверка session_id
+
     if not session_id:
         return False
 
-    session = stripe.checkout.Session.retrieve(session_id)
-    payment_status = session.get("payment_status")
-    print(payment_status)
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+        payment_status = session.get("payment_status")
+        print("Payment Status:", payment_status)
 
-    if payment_status == "paid":
-        # Установление подписки в активное состояние
-        subscription, _ = Subscription.objects.get_or_create(user=payment.user)
-        subscription.is_subscribed = True
-        subscription.save()
-        return True
-    return False
+        if payment_status == "paid":
+            # Установление подписки в активное состояние
+            subscription, _ = Subscription.objects.get_or_create(user=payment.user)
+            subscription.is_subscribed = True
+            subscription.save()
+            return True
+        return False
+
+    except stripe.error.StripeError as e:
+        print("Stripe error:", e)
+        return False
+    except Exception as e:
+        print("Unexpected error:", e)
+        return False
