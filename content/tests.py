@@ -9,8 +9,12 @@ from users.models import User
 class ContentTestCase(APITestCase):
     def setUp(self):
         """Создание пользователя, категории и контента для тестирования"""
-        self.user = User.objects.create_user(username="name", phone_number="+7-900-111-11-11", password="testpass123")
-        self.category = Category.objects.create(name="ЕГЭ", description="Подотовка к ЕГЭ по разным предметам")
+        self.user = User.objects.create_user(
+            username="name", phone_number="+7-900-111-11-11", password="testpass123"
+        )
+        self.category = Category.objects.create(
+            name="ЕГЭ", description="Подотовка к ЕГЭ по разным предметам"
+        )
         self.content = Content.objects.create(
             title="Математика ЕГЭ",
             description="Подготовка к ЕГЭ по математике",
@@ -68,4 +72,4 @@ class ContentTestCase(APITestCase):
         url = reverse("content:content_list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertGreaterEqual(len(response.context['object_list']), 1)
+        self.assertGreaterEqual(len(response.context["object_list"]), 1)

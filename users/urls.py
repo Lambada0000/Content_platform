@@ -3,7 +3,12 @@ from django.urls import path
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.apps import UsersConfig
-from users.views import UserCreateView, NewPasswordView, ProfileView, redirect_to_payment
+from users.views import (
+    UserCreateView,
+    NewPasswordView,
+    ProfileView,
+    redirect_to_payment,
+)
 
 app_name = UsersConfig.name
 urlpatterns = [
@@ -20,7 +25,7 @@ urlpatterns = [
         TokenRefreshView.as_view(),
         name="token_refresh",
     ),
-    path('new_password/', NewPasswordView.as_view(), name='new_password'),
+    path("new_password/", NewPasswordView.as_view(), name="new_password"),
     path("paymentstripe/", redirect_to_payment, name="paymentstripe"),
-    path('profile/', ProfileView.as_view(), name='profile'),
+    path("profile/", ProfileView.as_view(), name="profile"),
 ]

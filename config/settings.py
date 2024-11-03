@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_yasg",
     "corsheaders",
-
     "content",
     "users",
 ]
@@ -151,8 +150,10 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # Настройки для Celery
 CELERY_BEAT_SCHEDULE = {
-    'task-name': {
-        'task': 'myapp.tasks.my_task',  # Путь к задаче
-        'schedule': timedelta(minutes=100),  # Расписание выполнения задачи (например, каждые 100 минут)
+    "task-name": {
+        "task": "myapp.tasks.my_task",  # Путь к задаче
+        "schedule": timedelta(
+            minutes=100
+        ),  # Расписание выполнения задачи (например, каждые 100 минут)
     },
 }

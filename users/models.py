@@ -33,7 +33,6 @@ class User(AbstractUser):
         verbose_name="Аватар",
         help_text="Загрузите аватар",
     )
-    subscription = models.OneToOneField('Subscription', null=True, blank=True, on_delete=models.SET_NULL, related_name='user_subscription')
 
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
@@ -47,7 +46,13 @@ class User(AbstractUser):
 
 
 class Subscription(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='subscription_user')
+    user = models.OneToOneField(
+        User,
+        verbose_name="пользователь",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
     date_subscribed = models.DateField(auto_now_add=True)
     is_subscribed = models.BooleanField(default=False)
 
@@ -59,9 +64,9 @@ class Payment(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name="пользователь",
-        on_delete=models.CASCADE,
-        blank=True,
         null=True,
+        blank=True,
+        on_delete=models.CASCADE,
     )
     payment_date = models.DateTimeField(
         default=now, verbose_name="Дата оплаты", blank=True, null=True
@@ -73,8 +78,9 @@ class Payment(models.Model):
         blank=True,
         null=True,
     )
-    amount = models.PositiveIntegerField(verbose_name="Стоимость подписки", help_text="Укажите стоимость подписки"
-                                         )
+    amount = models.PositiveIntegerField(
+        verbose_name="Стоимость подписки", help_text="Укажите стоимость подписки"
+    )
     payment_type = models.CharField(
         max_length=50,
         verbose_name="Способ оплаты",

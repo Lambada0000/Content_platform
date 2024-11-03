@@ -19,7 +19,7 @@ def start_mailshot(content_id):
         user_email = subscription.user.email
         if user_email:
             send_mail(
-                subject='Новое обновление контента!',
+                subject="Новое обновление контента!",
                 message=f'Новый контент "{content.title}" доступен. Проверьте обновления на платформе!',
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[user_email],

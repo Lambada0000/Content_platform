@@ -8,4 +8,4 @@ class UserAdmin(admin.ModelAdmin):
 
     @admin.register(Subscription)
     class SubscriptionAdmin(admin.ModelAdmin):
-        list_display = ('user', 'is_subscribed', 'date_subscribed')
+        list_display = ("user", "is_subscribed", "date_subscribed")

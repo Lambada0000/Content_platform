@@ -17,7 +17,9 @@ class PaymentTestCase(TestCase):
         mock_stripe_retrieve.return_value = {"payment_status": "paid"}
 
         # Создаем платеж с session_id
-        payment = Payment.objects.create(user=self.user, session_id="test_session_id", amount=2000)
+        payment = Payment.objects.create(
+            user=self.user, session_id="test_session_id", amount=2000
+        )
 
         # Проверяем функцию check_payment_status
         is_paid = check_payment_status(payment)

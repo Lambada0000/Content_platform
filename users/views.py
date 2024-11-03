@@ -26,7 +26,7 @@ class NewPasswordView(PasswordResetView):
 class ProfileView(CreateView):
     model = User
     form_class = UserProfileForm
-    success_url = reverse_lazy('users:profile')
+    success_url = reverse_lazy("users:profile")
 
 
 @login_required
@@ -43,5 +43,4 @@ def redirect_to_payment(request):
         payment_link=payment_link,
     )
 
-    # check_payment_status(payment)
     return redirect(payment_link)
