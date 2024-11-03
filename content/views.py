@@ -10,10 +10,30 @@ from django.views.generic import (
 
 from content.forms import ContentForm
 from content.models import Content
+from users.models import Payment
+from users.services import check_payment_status
 
 
 class ContentListView(ListView):
     model = Content
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            payment = Payment.objects.filter(user=request.user).order_by('-id').first()
+            request.payment = payment
+        else:
+            request.payment = None
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context["is_subscribed"] = check_payment_status(self.request.payment)
+        else:
+            context["is_subscribed"] = False
+        print(context["is_subscribed"])
+        return context
 
 
 class ContentDetailView(DetailView):
