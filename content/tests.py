@@ -3,7 +3,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from content.models import Category, Content
-from users.models import User
+from users.models import User, Payment, Subscription
+
+from unittest.mock import patch
+from users.services import check_payment_status
 
 
 class ContentTestCase(APITestCase):
@@ -73,3 +76,19 @@ class ContentTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertGreaterEqual(len(response.context["object_list"]), 1)
+
+    @patch("stripe.checkout.Session.retrieve")
+    def test_payment_status_update(self, mock_stripe_retrieve):
+        mock_stripe_retrieve.return_value = {"payment_status": "paid"}
+
+        payment = Payment.objects.create(
+            user=self.user, session_id="test_session_id", amount=2000
+        )
+
+        is_paid = check_payment_status(payment)
+        self.assertTrue(is_paid)
+
+        subscription, created = Subscription.objects.get_or_create(user=self.user)
+        self.assertTrue(subscription.is_subscribed)
+
+        self.assertFalse(created)

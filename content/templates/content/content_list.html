@@ -3,9 +3,8 @@
 {% block content %}
 <main class="container">
     <div class="mb-4 text-center">
-        <h1 class="display-4 fst-italic mb-4">Получайте доход за Ваш талант</h1>
         <p class="lead mb-4">
-            <a href="{% url 'content:content_create' %}" class="btn btn-success">Создать контент</a>
+            <a href="{% url 'content:content_create' %}" class="btn btn-success mt-3">Создать контент</a>
         </p>
     </div>
     <div class="row mb-2">
@@ -17,7 +16,7 @@
                     <h3 class="mb-0">{{ cont.title }}</h3>
                     <div class="mb-1 text-body-secondary">{{ cont.publication_date }}</div>
                     <div class="col-auto d-none d-lg-block position-relative">
-                        <img style="height: 250px; width: 100%; border-radius: 15px;"
+                        <img style="width: 100%; height: auto; border-radius: 15px;"
                             src="{{ cont.photo | media_filter }}">
                         {% if user == cont.owner %}
                         <div class="card-header bg-info text-white text-center position-absolute top-0 start-0 w-100"
